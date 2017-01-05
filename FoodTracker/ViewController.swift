@@ -88,12 +88,5 @@ class ViewController: UIViewController, UITextFieldDelegate,
     imagePickerController.delegate = self
     present(imagePickerController, animated: true, completion: nil)
   }
-  
-  @IBAction func setDefaultLabelText(_ sender: UIButton) {
-    
-    // Resets nameMealLabel's content
-    nameMealLabel.text = "Meal Name"
-  }
-  
 }
 
