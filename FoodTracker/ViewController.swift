@@ -17,6 +17,7 @@ class ViewController: UIViewController, UITextFieldDelegate,
   @IBOutlet weak var nameTextField: UITextField!
   @IBOutlet weak var nameMealLabel: UILabel!
   @IBOutlet weak var photoImageView: UIImageView!
+  @IBOutlet weak var ratingControl: RatingControl!
   
   // MARK: UIViewController
   override func viewDidLoad() {
