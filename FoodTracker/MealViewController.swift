@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MealViewController.swift
 //  FoodTracker
 //
 //  Created by Emanuel Del Castillo on 1/1/17.
@@ -8,18 +8,17 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITextFieldDelegate,
+class MealViewController: UIViewController, UITextFieldDelegate,
                       UIImagePickerControllerDelegate,
                       UINavigationControllerDelegate
 {
 
   // MARK: Properties
   @IBOutlet weak var nameTextField: UITextField!
-  @IBOutlet weak var nameMealLabel: UILabel!
   @IBOutlet weak var photoImageView: UIImageView!
   @IBOutlet weak var ratingControl: RatingControl!
   
-  // MARK: UIViewController
+  // MARK: - UIViewController
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -32,7 +31,7 @@ class ViewController: UIViewController, UITextFieldDelegate,
     // Dispose of any resources that can be recreated.
   }
   
-  // MARK: UITextFieldDelegate
+  // MARK: - UITextFieldDelegate
   func textFieldShouldReturn(_ textField: UITextField) -> Bool {
     
     // Hide the keyboard
@@ -42,11 +41,10 @@ class ViewController: UIViewController, UITextFieldDelegate,
   
   func textFieldDidEndEditing(_ textField: UITextField) {
     
-    // Replaces the content of label with text field's value
-    nameMealLabel.text = textField.text
+    // #warning Incomplete implementation
   }
   
-  // MARK: UIImagePickerControllerDelegate
+  // MARK: - UIImagePickerControllerDelegate
   
   func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
     
@@ -71,7 +69,7 @@ class ViewController: UIViewController, UITextFieldDelegate,
     dismiss(animated: true, completion: nil)
   }
   
-  // MARK: Actions
+  // MARK: - Actions
   @IBAction func selectImageFromPhotoLibrary(_ sender: UITapGestureRecognizer) {
     
     // Hide the keyboard
