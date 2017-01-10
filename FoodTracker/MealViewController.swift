@@ -89,6 +89,10 @@ class MealViewController: UIViewController, UITextFieldDelegate,
   }
   
   // MARK: - Navigation
+  @IBAction func cancel(_ sender: UIBarButtonItem) {
+    // Get back to the meal list without adding a new meal
+    dismiss(animated: true, completion: nil)
+  }
   
   // This method lets you configure a view controller before it's presented.
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
