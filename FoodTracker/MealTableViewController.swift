@@ -60,7 +60,7 @@ class MealTableViewController: UITableViewController {
     let meal = meals[indexPath.row]
     
     // Configure the cell...
-    cell.nameLabel.text = meal.name
+    cell.nameLabel.text       = meal.name
     cell.photoImageView.image = meal.photo
     cell.ratingControl.rating = meal.rating
     
@@ -82,6 +82,7 @@ class MealTableViewController: UITableViewController {
     if editingStyle == .delete {
       // Delete the row from the data source
       meals.remove(at: indexPath.row)
+      saveMeals()
       tableView.deleteRows(at: [indexPath], with: .fade)
     }
     else if editingStyle == .insert {
@@ -115,28 +116,31 @@ class MealTableViewController: UITableViewController {
     // Get the new view controller using segue.destinationViewController.
     // Pass the selected object to the new view controller.
     switch (segue.identifier ?? "") {
-    case "addItem":
-      os_log("Adding a new meal.", log: .default, type: .debug)
-    case "showDetail":
-      guard let mealDetailViewController = segue.destination as? MealViewController
-        else {
-          fatalError("Unexpected destination: \(segue.destination)")
-        }
-      
-      guard let selectedMealCell = sender as? MealTableViewCell
-        else {
-          fatalError("Unexpected sender: \(sender)")
-        }
-      
-      guard let indexPath = tableView.indexPath(for: selectedMealCell)
-        else {
-          fatalError("The selected cell is not being displayed by the table")
-        }
-      
-      let selectedMeal = meals[indexPath.row]
-      mealDetailViewController.meal = selectedMeal
-    default:
-      fatalError("Unexpected Segue Identifier; \(segue.identifier)")
+    
+      case "addItem":
+        os_log("Adding a new meal.", log: .default, type: .debug)
+        
+      case "showDetail":
+        guard let mealDetailViewController = segue.destination as? MealViewController
+          else {
+            fatalError("Unexpected destination: \(segue.destination)")
+          }
+        
+        guard let selectedMealCell = sender as? MealTableViewCell
+          else {
+            fatalError("Unexpected sender: \(sender)")
+          }
+        
+        guard let indexPath = tableView.indexPath(for: selectedMealCell)
+          else {
+            fatalError("The selected cell is not being displayed by the table")
+          }
+        
+        let selectedMeal              = meals[indexPath.row]
+        mealDetailViewController.meal = selectedMeal
+        
+      default:
+        fatalError("Unexpected Segue Identifier; \(segue.identifier)")
     }
   }
 
@@ -157,6 +161,9 @@ class MealTableViewController: UITableViewController {
         meals.append(meal)
         tableView.insertRows(at: [newIndexPath], with: .automatic)
       }
+      
+      // Save the meals
+      saveMeals()
     }
   }
   
@@ -172,19 +179,38 @@ class MealTableViewController: UITableViewController {
     guard let meal1 = Meal(name: "Caprese Salad", photo: photo1, rating: 4)
       else {
         fatalError("Unable to instantiate meal1")
-    }
+      }
     
     guard let meal2 = Meal(name: "Chicken and Potatoes", photo: photo2, rating: 5)
       else {
         fatalError("Unable to instantiate meal2")
-    }
+      }
     
     guard let meal3 = Meal(name: "Pasta with Meatballs", photo: photo3, rating: 3)
       else {
         fatalError("Unable to instantiate meal3")
-    }
+      }
     
     // Add meals to array
     meals += [meal1, meal2, meal3]
+  }
+  
+  private func saveMeals() {
+    
+    // Archive the meals array to a specific location
+    let isSuccessfulSave =
+      NSKeyedArchiver.archiveRootObject(meals, toFile: Meal.ArchiveURL.path)
+    
+    if isSuccessfulSave {
+      os_log("Meals successfully saved.", log: .default, type: .debug)
+    }
+    else {
+      os_log("Failed to save meals...", log: .default, type: .error)
+    }
+  }
+  
+  private func loadMeals() -> [Meal]? {
+    
+    return NSKeyedUnarchiver.unarchiveObject(withFile: Meal.ArchiveURL.path) as? [Meal]
   }
 }
